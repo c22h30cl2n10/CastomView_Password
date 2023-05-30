@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CastomView_Password.MainPage"
+             xmlns:controls="clr-namespace:CastomView_Password.Controls"
+             xmlns:viewmodel="clr-namespace:CastomView_Password.ViewModel">
+
+    <ContentPage.BindingContext>
+        <viewmodel:MainViewModel/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <controls:PasswordField 
+            IsPasswordVisible="False"
+            TextColor="{StaticResource White}"
+            BackgroundColor="{StaticResource Black}"
+            IconTintColor="Aqua"
+            HideImageSource="hide_eye_gray.png"
+            ShowImageSource="open_eye_gray.png" />
+    </StackLayout>
+    
+</ContentPage>
