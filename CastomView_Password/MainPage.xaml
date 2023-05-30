@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CastomView_Password.MainPage"
+             xmlns:viewmodel="clr-namespace:CastomView_Password.ViewModel">
+
+    <ContentPage.BindingContext>
+        <viewmodel:MainViewModel/>
+    </ContentPage.BindingContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Entry Grid.Row="0"
+               FontSize="Body"
+               Text="{Binding Password}" 
+               IsPassword="{Binding IsPasswordHidden}" 
+               Placeholder="Пароль"/>
+
+        <ImageButton Grid.Row="0"
+                     Source="{Binding TogglePasswordButtonImage}"
+                     BackgroundColor="Transparent"
+                     Command="{Binding TogglePasswordCommand}"
+                     HorizontalOptions="End" 
+                     VerticalOptions="Center" 
+                     HeightRequest="24" 
+                     WidthRequest="24"
+                     Margin="12">
+        </ImageButton>
+    </Grid>
+</ContentPage>
