@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+
+//Не Control, просто для тестов
 namespace CastomView_Password.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged

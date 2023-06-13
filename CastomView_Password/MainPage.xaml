@@ -5,15 +5,12 @@
              xmlns:controls="clr-namespace:CastomView_Password.Controls"
              xmlns:viewmodel="clr-namespace:CastomView_Password.ViewModel">
 
-    <ContentPage.BindingContext>
-        <viewmodel:MainViewModel/>
-    </ContentPage.BindingContext>
     <StackLayout>
         <controls:PasswordField 
             IsPasswordVisible="False"
-            TextColor="{StaticResource White}"
-            BackgroundColor="{StaticResource Black}"
-            IconTintColor="Aqua"
+            TextColor="{StaticResource Black}"
+            BackgroundColor="{StaticResource White}"
+            IconTintColor="{Color Red}"
             HideImageSource="hide_eye_gray.png"
             ShowImageSource="open_eye_gray.png" />
     </StackLayout>

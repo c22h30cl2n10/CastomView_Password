@@ -1,36 +1,70 @@
-using CommunityToolkit.Maui.Behaviors;
+using System.ComponentModel;
 
 namespace CastomView_Password.Controls
 {
-    public partial class PasswordField : ContentView
+    public partial class PasswordField : ContentView, INotifyPropertyChanged
     {
-        private ImageSource _defaultImageSource;
 
-        public static readonly BindableProperty PasswordProperty = BindableProperty.Create(nameof(Password), typeof(string), typeof(PasswordField), propertyChanged: (bindable, oldValue, newValue) =>
-        {
-            var control = (PasswordField)bindable;
-            control.PasswordEntry.Text = newValue as string;
-        });
+        public static readonly BindableProperty PasswordProperty = BindableProperty.Create(
+            nameof(Password),
+            typeof(string),
+            typeof(PasswordField),
+            propertyChanged: (bindable, oldValue, newValue) => {}
+        );
 
-        public static readonly BindableProperty IsPasswordVisibleProperty = BindableProperty.Create(nameof(IsPasswordVisible), typeof(bool), typeof(PasswordField), true, propertyChanged: (bindable, oldValue, newValue) =>
-        {
-            var control = (PasswordField)bindable;
-            control.PasswordEntry.IsPassword = !(bool)newValue;
-            control.ToggleButton.Source = (bool)newValue ? control.ShowImageSource : control.HideImageSource;
-        });
+        public static readonly BindableProperty IsPasswordVisibleProperty = BindableProperty.Create(
+            nameof(IsPasswordVisible),
+            typeof(bool),
+            typeof(PasswordField),
+            true, //Пытаюсь задать значение по умолчанию - не работает
+            propertyChanged: (bindable, oldValue, newValue) => {}
+        );
 
-        public static readonly BindableProperty HideImageSourceProperty = BindableProperty.Create(nameof(HideImageSource), typeof(ImageSource), typeof(PasswordField), default(ImageSource), propertyChanged: OnImageSourceChanged);
-        public static readonly BindableProperty ShowImageSourceProperty = BindableProperty.Create(nameof(ShowImageSource), typeof(ImageSource), typeof(PasswordField), default(ImageSource), propertyChanged: OnImageSourceChanged);
+        public static readonly BindableProperty ImageSourceChangedProperty = BindableProperty.Create(
+            nameof(ImageSourceChanged),
+            typeof(ImageSource),
+            typeof(ImageSource),
+            default(ImageSource),
+            propertyChanged: OnImageSourceChanged);
 
-        public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(PasswordField), propertyChanged: OnTextColorChanged);
+        public static readonly BindableProperty HideImageSourceProperty = BindableProperty.Create(
+            nameof(HideImageSource),
+            typeof(ImageSource),
+            typeof(PasswordField),
+            default(ImageSource),
+            propertyChanged: OnImageSourceChanged);
 
-        public static readonly BindableProperty IconTintColorProperty = BindableProperty.Create(nameof(IconTintColor), typeof(Color), typeof(PasswordField), default(Color), propertyChanged: OnIconTintColorChanged);
+        public static readonly BindableProperty ShowImageSourceProperty = BindableProperty.Create(
+            nameof(ShowImageSource),
+            typeof(ImageSource),
+            typeof(PasswordField),
+            default(ImageSource),
+            propertyChanged: OnImageSourceChanged);
+
+        public static readonly BindableProperty TextColorProperty = BindableProperty.Create(
+            nameof(TextColor),
+            typeof(Color),
+            typeof(PasswordField),
+            propertyChanged: OnTextColorChanged);
+
+        public static readonly BindableProperty IconTintColorProperty = BindableProperty.Create(
+            nameof(IconTintColor),
+            typeof(Color),
+            typeof(PasswordField),
+            default(Color),
+            propertyChanged: OnIconTintColorChanged);
+
+        //Не фурычит
+        public static readonly BindableProperty TogglePasswordCommandProperty = BindableProperty.Create(
+            nameof(TogglePasswordCommand),
+            typeof(Command),
+            typeof(PasswordField),
+            null);
+
 
         public PasswordField()
         {
             InitializeComponent();
-
-            _defaultImageSource = ToggleButton.Source;
         }
 
         public string Password
@@ -43,6 +77,12 @@ namespace CastomView_Password.Controls
         {
             get => (bool)GetValue(IsPasswordVisibleProperty);
             set => SetValue(IsPasswordVisibleProperty, value);
+        }
+
+        public ImageSource ImageSourceChanged
+        {
+            get => (ImageSource)GetValue(ImageSourceChangedProperty);
+            set => SetValue(ImageSourceChangedProperty, value);
         }
 
         public ImageSource HideImageSource
@@ -69,31 +109,30 @@ namespace CastomView_Password.Controls
             set => SetValue(IconTintColorProperty, value);
         }
 
-        private static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        //Не фурычит
+        public Command TogglePasswordCommand
         {
-            var control = (PasswordField)bindable;
-            control.ToggleButton.Source = control.IsPasswordVisible ? control.ShowImageSource : control.HideImageSource;
+            get => (Command)GetValue(TogglePasswordCommandProperty);
+            set => SetValue(TogglePasswordCommandProperty, value);
+        }
+
+        public static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+
         }
 
         private static void OnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var control = (PasswordField)bindable;
-            control.PasswordEntry.TextColor = (Color)newValue;
+
         }
 
         private static void OnIconTintColorChanged(BindableObject bindable, object oldValue, object newValue)
         {
-            var control = (PasswordField)bindable;
-            var behaviors = control.ToggleButton.Behaviors;
 
-            // Удаляем предыдущий IconTintColorBehavior (если есть)
-            var previousBehavior = behaviors.FirstOrDefault(b => b is IconTintColorBehavior);
-            if (previousBehavior != null)
-                behaviors.Remove(previousBehavior);
-
-            // Создаем новый IconTintColorBehavior с указанным цветом
-            var newBehavior = new IconTintColorBehavior { TintColor = (Color)newValue };
-            behaviors.Add(newBehavior);
+        }
+        private void SetImageButtonSource()
+        {
+            ImageSourceChanged = IsPasswordVisible ? ShowImageSource : HideImageSource;
         }
 
         private void TogglePasswordVisibility()
@@ -104,14 +143,7 @@ namespace CastomView_Password.Controls
         private void ToggleButton_Clicked(object sender, System.EventArgs e)
         {
             TogglePasswordVisibility();
-        }
-
-        protected override void OnParentSet()
-        {
-            base.OnParentSet();
-
-            if (Parent != null)
-                ToggleButton.Source = IsPasswordVisible ? _defaultImageSource : HideImageSource;
+            SetImageButtonSource();
         }
     }
 }
