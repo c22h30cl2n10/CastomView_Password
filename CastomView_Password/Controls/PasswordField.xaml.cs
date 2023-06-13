@@ -56,15 +56,18 @@ namespace CastomView_Password.Controls
             default(Color),
             propertyChanged: OnIconTintColorChanged);
 
-        //Не фурычит
-        public static readonly BindableProperty TogglePasswordCommandProperty =
-            BindableProperty.Create(nameof(TogglePasswordCommand), typeof(ICommand), typeof(PasswordField));
+        
+        public static readonly BindableProperty TogglePasswordCommandProperty = BindableProperty.Create(
+            nameof(TogglePasswordCommand),
+            typeof(ICommand),
+            typeof(PasswordField));
 
 
 
         public PasswordField()
         {
             InitializeComponent();
+            //Можно ли это тут оставлять?
             TogglePasswordCommand = new Command(TogglePasswordVisibility);
         }
 
@@ -110,7 +113,6 @@ namespace CastomView_Password.Controls
             set => SetValue(IconTintColorProperty, value);
         }
 
-        //Не фурычит
         public ICommand TogglePasswordCommand
         {
             get { return (ICommand)GetValue(TogglePasswordCommandProperty); }
@@ -136,9 +138,6 @@ namespace CastomView_Password.Controls
         private static void OnIconTintColorChanged(BindableObject bindable, object oldValue, object newValue)
         {
 
-        }
-        private void SetImageButtonSource()
-        {
         }
 
         private void TogglePasswordVisibility()
