@@ -1,4 +1,6 @@
 using System.ComponentModel;
+using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace CastomView_Password.Controls
 {
@@ -55,16 +57,15 @@ namespace CastomView_Password.Controls
             propertyChanged: OnIconTintColorChanged);
 
         //Не фурычит
-        public static readonly BindableProperty TogglePasswordCommandProperty = BindableProperty.Create(
-            nameof(TogglePasswordCommand),
-            typeof(Command),
-            typeof(PasswordField),
-            null);
+        public static readonly BindableProperty TogglePasswordCommandProperty =
+            BindableProperty.Create(nameof(TogglePasswordCommand), typeof(ICommand), typeof(PasswordField));
+
 
 
         public PasswordField()
         {
             InitializeComponent();
+            TogglePasswordCommand = new Command(TogglePasswordVisibility);
         }
 
         public string Password
@@ -110,11 +111,17 @@ namespace CastomView_Password.Controls
         }
 
         //Не фурычит
-        public Command TogglePasswordCommand
+        public ICommand TogglePasswordCommand
         {
-            get => (Command)GetValue(TogglePasswordCommandProperty);
-            set => SetValue(TogglePasswordCommandProperty, value);
+            get { return (ICommand)GetValue(TogglePasswordCommandProperty); }
+            set { SetValue(TogglePasswordCommandProperty, value); }
         }
+
+        public void ChangeTogglePasswordCommand(Command newCommand)
+        {
+            SetValue(TogglePasswordCommandProperty, newCommand);
+        }
+
 
         public static void OnImageSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -132,18 +139,17 @@ namespace CastomView_Password.Controls
         }
         private void SetImageButtonSource()
         {
-            ImageSourceChanged = IsPasswordVisible ? ShowImageSource : HideImageSource;
         }
 
         private void TogglePasswordVisibility()
         {
             IsPasswordVisible = !IsPasswordVisible;
+
+            ImageSourceChanged = IsPasswordVisible ? ShowImageSource : HideImageSource;
         }
 
         private void ToggleButton_Clicked(object sender, System.EventArgs e)
         {
-            TogglePasswordVisibility();
-            SetImageButtonSource();
         }
     }
 }
